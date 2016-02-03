@@ -1,6 +1,6 @@
 Name:		dlib
 Version:	18.18
-Release:	2%{?dist}
+Release:	3%{?dist}
 Summary:	A modern C++ toolkit containing machine learning algorithms
 
 License:	Boost
@@ -143,6 +143,9 @@ find %{buildroot}%{python3_sitearch}/dlib/ -type f -name '*.py' -exec sed -i '1s
 
 
 %changelog
+* Wed Feb 03 2016 Fedora Release Engineering <releng@fedoraproject.org> - 18.18-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
+
 * Sat Jan 23 2016 Dmitry Mikhirev <mikhirev@gmail.com> 18.18-2
 - Rebuild against new libboost_python
 
