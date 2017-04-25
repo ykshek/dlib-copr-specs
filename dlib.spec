@@ -1,6 +1,6 @@
 Name:		dlib
-Version:	18.18
-Release:	6%{?dist}
+Version:	19.4
+Release:	1%{?dist}
 Summary:	A modern C++ toolkit containing machine learning algorithms
 
 License:	Boost
@@ -95,16 +95,18 @@ popd
 
 
 %install
-install -d %{buildroot}%{_libdir}
-install -d %{buildroot}%{_includedir}
-install -m 755 build/libdlib.so.%{version}.* %{buildroot}%{_libdir}
-cp -a build/libdlib.so %{buildroot}%{_libdir}
-find dlib -type f -name '*.h' -exec \
-    install -D -m 644 {} %{buildroot}%{_includedir}/{} \;
+pushd build
+%make_install
+popd
+rm -f %{buildroot}/%{_libdir}/*.a
+rm -f %{buildroot}/%{_docdir}/dlib/LICENSE.txt
+
 %py2_install
 %py3_install
 find %{buildroot}%{python2_sitearch}/dlib/ -type f -name '*.py' -exec sed -i '1s|^#!.*|#!%{__python2}|' {} \;
 find %{buildroot}%{python3_sitearch}/dlib/ -type f -name '*.py' -exec sed -i '1s|^#!.*|#!%{__python3}|' {} \;
+
+find %{buildroot} -name '.*' -exec rm -rf {} +
 
 
 %post -p /sbin/ldconfig
@@ -119,6 +121,8 @@ find %{buildroot}%{python3_sitearch}/dlib/ -type f -name '*.py' -exec sed -i '1s
 %files devel
 %{_libdir}/libdlib.so
 %{_includedir}/dlib/
+%{_libdir}/cmake/dlib/
+%{_libdir}/pkgconfig/*.pc
 
 %files -n python2-%{name}
 %license dlib/LICENSE.txt
@@ -143,6 +147,9 @@ find %{buildroot}%{python3_sitearch}/dlib/ -type f -name '*.py' -exec sed -i '1s
 
 
 %changelog
+* Mon Apr 17 2017 Dmitry Mikhirev <mikhirev@gmail.com> 19.4-1
+- Update to 19.4 (RHBZ #1442868)
+
 * Fri Feb 10 2017 Fedora Release Engineering <releng@fedoraproject.org> - 18.18-6
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
 
