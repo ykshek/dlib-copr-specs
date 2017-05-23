@@ -1,6 +1,6 @@
 Name:		dlib
 Version:	19.4
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	A modern C++ toolkit containing machine learning algorithms
 
 License:	Boost
@@ -19,6 +19,8 @@ BuildRequires:	fftw-devel
 BuildRequires:	boost-devel
 BuildRequires:	python2-devel
 BuildRequires:	python3-devel
+BuildRequires:	boost-python-devel
+BuildRequires:	boost-python3-devel
 
 %description
 Dlib is a general purpose cross-platform open source software library written
@@ -147,6 +149,9 @@ find %{buildroot} -name '.*' -exec rm -rf {} +
 
 
 %changelog
+* Sun May 21 2017 Dmitry Mikhirev <mikhirev@gmail.com> 19.4-2
+- Add BR boost-python3-devel (RHBZ #1443250)
+
 * Mon Apr 17 2017 Dmitry Mikhirev <mikhirev@gmail.com> 19.4-1
 - Update to 19.4 (RHBZ #1442868)
 
