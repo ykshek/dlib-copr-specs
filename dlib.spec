@@ -1,6 +1,6 @@
 Name:		dlib
 Version:	19.4
-Release:	2%{?dist}
+Release:	3%{?dist}
 Summary:	A modern C++ toolkit containing machine learning algorithms
 
 License:	Boost
@@ -149,6 +149,9 @@ find %{buildroot} -name '.*' -exec rm -rf {} +
 
 
 %changelog
+* Tue Jul 18 2017 Jonathan Wakely <jwakely@redhat.com> - 19.4-3
+- Rebuilt for Boost 1.64
+
 * Sun May 21 2017 Dmitry Mikhirev <mikhirev@gmail.com> 19.4-2
 - Add BR boost-python3-devel (RHBZ #1443250)
 
