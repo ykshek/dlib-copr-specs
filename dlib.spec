@@ -1,6 +1,6 @@
 Name:		dlib
 Version:	19.4
-Release:	3%{?dist}
+Release:	4%{?dist}
 Summary:	A modern C++ toolkit containing machine learning algorithms
 
 License:	Boost
@@ -149,6 +149,9 @@ find %{buildroot} -name '.*' -exec rm -rf {} +
 
 
 %changelog
+* Wed Jul 26 2017 Fedora Release Engineering <releng@fedoraproject.org> - 19.4-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Mass_Rebuild
+
 * Tue Jul 18 2017 Jonathan Wakely <jwakely@redhat.com> - 19.4-3
 - Rebuilt for Boost 1.64
 
