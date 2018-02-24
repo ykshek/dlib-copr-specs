@@ -90,10 +90,13 @@ pushd build
 %make_build
 
 popd
-
-%define setup_py_extra_opts --no USE_SSE4_INSTRUCTIONS
-%py2_build %{setup_py_extra_opts}
-%py3_build %{setup_py_extra_opts}
+# this is really needed: in the python tools build it's enabled by
+# default and we do not want that. see
+# https://github.com/davisking/dlib/commit/fbd117804758bd9174a27ce471acfe21b8bfc208
+# and https://github.com/davisking/dlib/issues/111
+%define py_setup_args --no USE_SSE4_INSTRUCTIONS
+%py2_build
+%py3_build
 
 
 %install
