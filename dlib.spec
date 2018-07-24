@@ -19,7 +19,7 @@ BuildRequires:	fftw-devel
 BuildRequires:	boost-devel
 BuildRequires:	python2-devel
 BuildRequires:	python3-devel
-BuildRequires:	boost-python-devel
+BuildRequires:	boost-python2-devel
 BuildRequires:	boost-python3-devel
 
 %description
