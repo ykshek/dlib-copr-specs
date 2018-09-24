@@ -1,6 +1,6 @@
 Name:		dlib
 Version:	19.4
-Release:	9%{?dist}
+Release:	10%{?dist}
 Summary:	A modern C++ toolkit containing machine learning algorithms
 
 License:	Boost
@@ -17,9 +17,7 @@ BuildRequires:	openblas-devel
 BuildRequires:	sqlite-devel
 BuildRequires:	fftw-devel
 BuildRequires:	boost-devel
-BuildRequires:	python2-devel
 BuildRequires:	python3-devel
-BuildRequires:	boost-python2-devel
 BuildRequires:	boost-python3-devel
 
 %description
@@ -41,17 +39,6 @@ Requires:	%{name}%{?_isa} = %{version}-%{release}
 Dlib is a general purpose cross-platform open source software library written
 in the C++ programming language. This package contains development files for
 the library.
-
-
-%package -n python2-%{name}
-Summary:	Python 2 interface to %{name}
-License:	Boost and Public Domain
-%{?python_provide:%python_provide python2-%{name}}
-
-%description -n python2-%{name}
-Dlib is a general purpose cross-platform open source software library written
-in the C++ programming language. This package contains Python 2 API for the
-library.
 
 
 %package -n python3-%{name}
@@ -95,7 +82,6 @@ popd
 # https://github.com/davisking/dlib/commit/fbd117804758bd9174a27ce471acfe21b8bfc208
 # and https://github.com/davisking/dlib/issues/111
 %define py_setup_args --no USE_SSE4_INSTRUCTIONS
-%py2_build
 %py3_build
 
 
@@ -106,9 +92,7 @@ popd
 rm -f %{buildroot}/%{_libdir}/*.a
 rm -f %{buildroot}/%{_docdir}/dlib/LICENSE.txt
 
-%py2_install
 %py3_install
-find %{buildroot}%{python2_sitearch}/dlib/ -type f -name '*.py' -exec sed -i '1s|^#!.*|#!%{__python2}|' {} \;
 find %{buildroot}%{python3_sitearch}/dlib/ -type f -name '*.py' -exec sed -i '1s|^#!.*|#!%{__python3}|' {} \;
 
 find %{buildroot} -name '.*' -exec rm -rf {} +
@@ -129,12 +113,6 @@ find %{buildroot} -name '.*' -exec rm -rf {} +
 %{_libdir}/cmake/dlib/
 %{_libdir}/pkgconfig/*.pc
 
-%files -n python2-%{name}
-%license dlib/LICENSE.txt
-%license python_examples/LICENSE_FOR_EXAMPLE_PROGRAMS.txt
-%{python2_sitearch}/dlib/
-%{python2_sitearch}/dlib-*.egg-info/
-
 %files -n python3-%{name}
 %license dlib/LICENSE.txt
 %license python_examples/LICENSE_FOR_EXAMPLE_PROGRAMS.txt
@@ -152,6 +130,9 @@ find %{buildroot} -name '.*' -exec rm -rf {} +
 
 
 %changelog
+* Mon Sep 24 2018 Miro Hrončok <mhroncok@redhat.com> - 19.4-10
+- Drop Python 2 subpackage (#1627444)
+
 * Thu Jul 12 2018 Fedora Release Engineering <releng@fedoraproject.org> - 19.4-9
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
 
