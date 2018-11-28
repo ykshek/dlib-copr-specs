@@ -1,6 +1,7 @@
 Name:		dlib
-Version:	19.4
-Release:	11%{?dist}
+Version:	19.16
+Release:	1%{?dist}
+
 Summary:	A modern C++ toolkit containing machine learning algorithms
 
 License:	Boost
@@ -19,6 +20,7 @@ BuildRequires:	fftw-devel
 BuildRequires:	boost-devel
 BuildRequires:	python3-devel
 BuildRequires:	boost-python3-devel
+BuildRequires:	/usr/bin/pathfix.py
 
 %description
 Dlib is a general purpose cross-platform open source software library written
@@ -69,6 +71,12 @@ find docs -type f -exec chmod 644 {} +
 find examples -type f -exec chmod 644 {} +
 mkdir -p build
 
+# Fix all Python shebangs recursively in .
+# -p preserves timestamps
+# -n prevents creating ~backup files
+# -i specifies the interpreter for the shebang
+# Need to list files that do not match ^[a-zA-Z0-9_]+\.py$ explicitly!
+pathfix.py -pni "%{__python3} %{py3_shbang_opts}" .
 
 %build
 pushd build
@@ -93,13 +101,10 @@ rm -f %{buildroot}/%{_libdir}/*.a
 rm -f %{buildroot}/%{_docdir}/dlib/LICENSE.txt
 
 %py3_install
-find %{buildroot}%{python3_sitearch}/dlib/ -type f -name '*.py' -exec sed -i '1s|^#!.*|#!%{__python3}|' {} \;
+# Some files got ambiguous python shebangs, we fix them after everything else is done
+pathfix.py -pni "%{__python3} %{py3_shbang_opts}" %{buildroot}%{python3_sitearch} 
 
 find %{buildroot} -name '.*' -exec rm -rf {} +
-
-
-%ldconfig_scriptlets
-
 
 %files
 %license dlib/LICENSE.txt
@@ -114,7 +119,7 @@ find %{buildroot} -name '.*' -exec rm -rf {} +
 %files -n python3-%{name}
 %license dlib/LICENSE.txt
 %license python_examples/LICENSE_FOR_EXAMPLE_PROGRAMS.txt
-%{python3_sitearch}/dlib/
+%{python3_sitearch}
 %{python3_sitearch}/dlib-*.egg-info/
 
 %files doc
@@ -128,6 +133,11 @@ find %{buildroot} -name '.*' -exec rm -rf {} +
 
 
 %changelog
+* Fri Feb 01 2019 Luya Tshimbalanga <luya@fedoraproject.org> - 19.16-1
+- Update to 19.16
+- Drop ldconfig scripts
+- Fix all python shebangs with new method
+
 * Thu Jan 31 2019 Fedora Release Engineering <releng@fedoraproject.org> - 19.4-11
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
 
@@ -178,3 +188,4 @@ find %{buildroot} -name '.*' -exec rm -rf {} +
 
 * Wed Nov 4 2015 Dmitry Mikhirev <mikhirev@gmail.com> 18.18-1
 - Initial package
+
