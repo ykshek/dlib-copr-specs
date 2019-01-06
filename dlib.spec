@@ -1,6 +1,6 @@
 Name:		dlib
 Version:	19.16
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	A modern C++ toolkit containing machine learning algorithms
 
 License:	Boost
@@ -70,13 +70,6 @@ find docs -type f -exec chmod 644 {} +
 find examples -type f -exec chmod 644 {} +
 mkdir -p build
 
-# Fix all Python shebangs recursively in .
-# -p preserves timestamps
-# -n prevents creating ~backup files
-# -i specifies the interpreter for the shebang
-# Need to list files that do not match ^[a-zA-Z0-9_]+\.py$ explicitly!
-pathfix.py -pni "%{__python3} %{py3_shbang_opts}" .
-
 %build
 pushd build
 
@@ -101,7 +94,7 @@ rm -f %{buildroot}/%{_docdir}/dlib/LICENSE.txt
 
 %py3_install
 # Some files got ambiguous python shebangs, we fix them after everything else is done
-pathfix.py -pni "%{__python3} %{py3_shbang_opts}" %{buildroot}%{python3_sitearch} 
+pathfix.py -pni "%{__python3} %{py3_shbang_opts}" %{buildroot}%{python3_sitearch}/
 
 find %{buildroot} -name '.*' -exec rm -rf {} +
 
@@ -118,7 +111,7 @@ find %{buildroot} -name '.*' -exec rm -rf {} +
 %files -n python3-%{name}
 %license dlib/LICENSE.txt
 %license python_examples/LICENSE_FOR_EXAMPLE_PROGRAMS.txt
-%{python3_sitearch}
+%{python3_sitearch}/dlib.cpython-37m-x86_64-linux-gnu.so
 %{python3_sitearch}/dlib-*.egg-info/
 
 %files doc
@@ -127,11 +120,11 @@ find %{buildroot} -name '.*' -exec rm -rf {} +
 %doc documentation.html
 %doc docs
 %doc examples
-%exclude %{_docdir}/%{name}-doc/docs/python/.doctrees
-%exclude %{_docdir}/%{name}-doc/docs/python/.buildinfo
-
 
 %changelog
+* Wed Nov 28 2018 Luya Tshimbalanga <luya@fedoraproject.org> - 19.16-2
+- Fix directory ownership
+
 * Wed Nov 28 2018 Luya Tshimbalanga <luya@fedoraproject.org> - 19.16-1
 - Update to 19.16
 - Drop ldconfig scripts
