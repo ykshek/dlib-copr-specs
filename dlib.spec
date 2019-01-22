@@ -98,9 +98,7 @@ find %{buildroot}%{python3_sitearch}/dlib/ -type f -name '*.py' -exec sed -i '1s
 find %{buildroot} -name '.*' -exec rm -rf {} +
 
 
-%post -p /sbin/ldconfig
-
-%postun -p /sbin/ldconfig
+%ldconfig_scriptlets
 
 
 %files
