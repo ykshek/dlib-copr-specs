@@ -1,6 +1,6 @@
 Name:		dlib
 Version:	19.16
-Release:	2%{?dist}
+Release:	3%{?dist}
 
 Summary:	A modern C++ toolkit containing machine learning algorithms
 
@@ -20,7 +20,6 @@ BuildRequires:	fftw-devel
 BuildRequires:	boost-devel
 BuildRequires:	python3-devel
 BuildRequires:	boost-python3-devel
-BuildRequires:	/usr/bin/pathfix.py
 
 %description
 Dlib is a general purpose cross-platform open source software library written
@@ -123,7 +122,11 @@ find %{buildroot} -name '.*' -exec rm -rf {} +
 %doc examples
 
 %changelog
-* Fri Feb 01 2019 Luya Tshimbalanga <luya@fedoraproject.org> - 19.16-2
+<<<<<<< HEAD
+* Wed Mar 06 2019 Luya Tshimbalanga <luya@fedoraproject.org> - 19.16-3
+- Drop hard path buildrequires for python3 shebang fix
+
+* Wed Nov 28 2018 Luya Tshimbalanga <luya@fedoraproject.org> - 19.16-2
 - Fix directory ownership
 
 * Wed Nov 28 2018 Luya Tshimbalanga <luya@fedoraproject.org> - 19.16-1
