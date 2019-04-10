@@ -186,4 +186,3 @@ find %{buildroot} -name '.*' -exec rm -rf {} +
 
 * Wed Nov 4 2015 Dmitry Mikhirev <mikhirev@gmail.com> 18.18-1
 - Initial package
-
