@@ -1,6 +1,6 @@
 Name:		dlib
-Version:	19.16
-Release:	3%{?dist}
+Version:	19.17
+Release:	1%{?dist}
 Summary:	A modern C++ toolkit containing machine learning algorithms
 
 License:	Boost
@@ -110,7 +110,7 @@ find %{buildroot} -name '.*' -exec rm -rf {} +
 %files -n python3-%{name}
 %license dlib/LICENSE.txt
 %license python_examples/LICENSE_FOR_EXAMPLE_PROGRAMS.txt
-#%%{python3_sitearch}/dlib.cpython-37m-x86_64-linux-gnu.so
+%{python3_sitearch}/dlib.cpython-37m-x86_64-linux-gnu.so
 %{python3_sitearch}/dlib-*.egg-info/
 
 %files doc
@@ -121,6 +121,9 @@ find %{buildroot} -name '.*' -exec rm -rf {} +
 %doc examples
 
 %changelog
+* Wed Mar 06 2019 Luya Tshimbalanga <luya@fedoraproject.org> - 19.17-1
+- Update to 19.17
+
 * Wed Mar 06 2019 Luya Tshimbalanga <luya@fedoraproject.org> - 19.16-3
 - Drop hard path buildrequires for python3 shebang fix
 
@@ -179,4 +182,3 @@ find %{buildroot} -name '.*' -exec rm -rf {} +
 
 * Wed Nov 4 2015 Dmitry Mikhirev <mikhirev@gmail.com> 18.18-1
 - Initial package
-
