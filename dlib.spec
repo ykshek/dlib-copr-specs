@@ -110,7 +110,7 @@ find %{buildroot} -name '.*' -exec rm -rf {} +
 %files -n python3-%{name}
 %license dlib/LICENSE.txt
 %license python_examples/LICENSE_FOR_EXAMPLE_PROGRAMS.txt
-%{python3_sitearch}/dlib.cpython-37m-x86_64-linux-gnu.so
+%{python3_sitearch}/dlib.cpython-%{python3_version_nodots}m-x86_64-linux-gnu.so
 %{python3_sitearch}/dlib-*.egg-info/
 
 %files doc
