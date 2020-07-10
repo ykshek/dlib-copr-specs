@@ -116,8 +116,12 @@ find %{buildroot} -name '.*' -exec rm -rf {} +
 %files -n python3-%{name}
 %license dlib/LICENSE.txt
 %license python_examples/LICENSE_FOR_EXAMPLE_PROGRAMS.txt
-%{python3_sitearch}/dlib.cpython-%{python3_version_nodots}-%{_arch}-linux-gnu.so
-%{python3_sitearch}/dlib-*.egg-info/
+%ifarch armv7l
+{python3_sitearch}/%{name}.cpython-%{python3_version_nodots}-%{_arch}-linux-gnueabi.so
+%else
+%{python3_sitearch}/%{name}.cpython-%{python3_version_nodots}-%{_arch}-linux-gnu.so
+%endif
+%{python3_sitearch}/%{name}-*.egg-info/
 
 %files doc
 %license examples/LICENSE_FOR_EXAMPLE_PROGRAMS.txt
