@@ -1,24 +1,27 @@
+%global	majorver 20
+
 Name:		dlib
-Version:	19.4
-Release:	12%{?dist}
+Version:	19.%{majorver}
+Release:	2%{?dist}
 Summary:	A modern C++ toolkit containing machine learning algorithms
 
 License:	Boost
 URL:		http://dlib.net
 Source0:	http://dlib.net/files/%{name}-%{version}.tar.bz2
 
-BuildRequires:	gcc-c++
+BuildRequires:	boost-devel
 BuildRequires:	cmake
-BuildRequires:	libX11-devel
-BuildRequires:	libpng-devel
-BuildRequires:	libjpeg-turbo-devel
+BuildRequires:	gcc-c++
 BuildRequires:	gcc-gfortran
 BuildRequires:	openblas-devel
-BuildRequires:	sqlite-devel
-BuildRequires:	fftw-devel
-BuildRequires:	boost-devel
-BuildRequires:	python3-devel
-BuildRequires:	boost-python3-devel
+BuildRequires:	pkgconfig(fftw3)
+BuildRequires:	pkgconfig(libpng)
+BuildRequires:	pkgconfig(libjpeg)
+BuildRequires:	pkgconfig(python3)
+BuildRequires:	pkgconfig(sqlite3)
+BuildRequires:	pkgconfig(x11)
+
+
 
 %description
 Dlib is a general purpose cross-platform open source software library written
@@ -56,6 +59,7 @@ library.
 Summary:	Documentation for dlib
 License:	Boost and Public Domain and CC-BY-SA
 Requires:	%{name}%{?_isa} = %{version}-%{release}
+BuildArch:	noarch
 
 %description doc
 Dlib is a general purpose cross-platform open source software library written
@@ -69,7 +73,6 @@ find docs -type f -exec chmod 644 {} +
 find examples -type f -exec chmod 644 {} +
 mkdir -p build
 
-
 %build
 pushd build
 
@@ -81,7 +84,7 @@ popd
 # default and we do not want that. see
 # https://github.com/davisking/dlib/commit/fbd117804758bd9174a27ce471acfe21b8bfc208
 # and https://github.com/davisking/dlib/issues/111
-%define py_setup_args --no USE_SSE4_INSTRUCTIONS
+%global py_setup_args --no USE_SSE4_INSTRUCTIONS
 %py3_build
 
 
@@ -90,20 +93,19 @@ pushd build
 %make_install
 popd
 rm -f %{buildroot}/%{_libdir}/*.a
-rm -f %{buildroot}/%{_docdir}/dlib/LICENSE.txt
+rm -f %{buildroot}/%{_docdir}/%{name}/LICENSE.txt
+# Remove Sphinx build leftovers
+rm -f %%{buildroot}/%{_docdir}/%{name}-doc/docs/python/.buildinfo
 
 %py3_install
-find %{buildroot}%{python3_sitearch}/dlib/ -type f -name '*.py' -exec sed -i '1s|^#!.*|#!%{__python3}|' {} \;
+# Some files got ambiguous python shebangs, we fix them after everything else is done
+pathfix.py -pni "%{__python3} %{py3_shbang_opts}" %{buildroot}%{python3_sitearch}/
 
 find %{buildroot} -name '.*' -exec rm -rf {} +
 
-
-%ldconfig_scriptlets
-
-
 %files
 %license dlib/LICENSE.txt
-%{_libdir}/libdlib.so.*
+%{_libdir}/libdlib.so.19*
 
 %files devel
 %{_libdir}/libdlib.so
@@ -114,7 +116,7 @@ find %{buildroot} -name '.*' -exec rm -rf {} +
 %files -n python3-%{name}
 %license dlib/LICENSE.txt
 %license python_examples/LICENSE_FOR_EXAMPLE_PROGRAMS.txt
-%{python3_sitearch}/dlib/
+%{python3_sitearch}/dlib.cpython-%{python3_version_nodots}-%{_arch}-linux-gnu.so
 %{python3_sitearch}/dlib-*.egg-info/
 
 %files doc
@@ -123,16 +125,31 @@ find %{buildroot} -name '.*' -exec rm -rf {} +
 %doc documentation.html
 %doc docs
 %doc examples
-%exclude %{_docdir}/%{name}-doc/docs/python/.doctrees
-%exclude %{_docdir}/%{name}-doc/docs/python/.buildinfo
-
+%doc python/_static/{jquery,underscore}.js
 
 %changelog
-* Wed Jul 24 2019 Fedora Release Engineering <releng@fedoraproject.org> - 19.4-12
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
+* Fri Jul 03 2020 Luya Tshimbalanga <luya@fedoraproject.org> - 19.20-2
+- Set noarch for large documentation package
+- Use specific versioning for libraries
+- Remove Sphinx build leftovers
+- Use %%global instead of %%define for declaration
 
-* Thu Jan 31 2019 Fedora Release Engineering <releng@fedoraproject.org> - 19.4-11
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
+* Fri Jul 03 2020 Luya Tshimbalanga <luya@fedoraproject.org> - 19.20-1
+- Update to 19.20
+
+* Wed Mar 06 2019 Luya Tshimbalanga <luya@fedoraproject.org> - 19.17-1
+- Update to 19.17
+
+* Wed Mar 06 2019 Luya Tshimbalanga <luya@fedoraproject.org> - 19.16-3
+- Drop hard path buildrequires for python3 shebang fix
+
+* Wed Nov 28 2018 Luya Tshimbalanga <luya@fedoraproject.org> - 19.16-2
+- Fix directory ownership
+
+* Wed Nov 28 2018 Luya Tshimbalanga <luya@fedoraproject.org> - 19.16-1
+- Update to 19.16
+- Drop ldconfig scripts
+- Fix all python shebangs with new method
 
 * Mon Sep 24 2018 Miro Hrončok <mhroncok@redhat.com> - 19.4-10
 - Drop Python 2 subpackage (#1627444)
