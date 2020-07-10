@@ -21,7 +21,7 @@ BuildRequires:	pkgconfig(python3)
 BuildRequires:	pkgconfig(sqlite3)
 BuildRequires:	pkgconfig(x11)
 
-
+ExcludeArch:	ppc64le
 
 %description
 Dlib is a general purpose cross-platform open source software library written
