@@ -124,8 +124,9 @@ find %{buildroot} -name '.*' -exec rm -rf {} +
 %license examples/video_frames/license.txt
 %doc documentation.html
 %doc docs
+%doc docs/python/_static/{jquery,underscore}.js
 %doc examples
-%doc python/_static/{jquery,underscore}.js
+
 
 %changelog
 * Fri Jul 03 2020 Luya Tshimbalanga <luya@fedoraproject.org> - 19.20-2
