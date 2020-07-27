@@ -2,7 +2,7 @@
 
 Name:		dlib
 Version:	19.%{majorver}
-Release:	2%{?dist}
+Release:	3%{?dist}
 Summary:	A modern C++ toolkit containing machine learning algorithms
 
 License:	Boost
@@ -133,6 +133,9 @@ find %{buildroot} -name '.*' -exec rm -rf {} +
 
 
 %changelog
+* Mon Jul 27 2020 Fedora Release Engineering <releng@fedoraproject.org> - 19.20-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
+
 * Fri Jul 03 2020 Luya Tshimbalanga <luya@fedoraproject.org> - 19.20-2
 - Set noarch for large documentation package
 - Use specific versioning for libraries
