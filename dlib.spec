@@ -2,7 +2,7 @@
 
 Name:		dlib
 Version:	19.%{majorver}
-Release:	4%{?dist}
+Release:	5%{?dist}
 Summary:	A modern C++ toolkit containing machine learning algorithms
 
 License:	Boost
@@ -71,15 +71,11 @@ documentation and examples.
 %autosetup
 find docs -type f -exec chmod 644 {} +
 find examples -type f -exec chmod 644 {} +
-mkdir -p build
 
 %build
-pushd build
+%cmake .
+%cmake_build
 
-%cmake ../dlib
-%make_build
-
-popd
 # this is really needed: in the python tools build it's enabled by
 # default and we do not want that. see
 # https://github.com/davisking/dlib/commit/fbd117804758bd9174a27ce471acfe21b8bfc208
@@ -89,9 +85,8 @@ popd
 
 
 %install
-pushd build
-%make_install
-popd
+%cmake_install
+
 rm -f %{buildroot}/%{_libdir}/*.a
 rm -f %{buildroot}/%{_docdir}/%{name}/LICENSE.txt
 # Remove Sphinx build leftovers
@@ -116,8 +111,8 @@ find %{buildroot} -name '.*' -exec rm -rf {} +
 %files -n python3-%{name}
 %license dlib/LICENSE.txt
 %license python_examples/LICENSE_FOR_EXAMPLE_PROGRAMS.txt
-%ifarch armv7l
-{python3_sitearch}/%{name}.cpython-%{python3_version_nodots}-%{_arch}-linux-gnueabi.so
+%ifarch armv7hl
+%{python3_sitearch}/%{name}.cpython-%{python3_version_nodots}-%{_arch}-linux-gnueabi.so
 %else
 %{python3_sitearch}/%{name}.cpython-%{python3_version_nodots}-%{_arch}-linux-gnu.so
 %endif
@@ -133,6 +128,9 @@ find %{buildroot} -name '.*' -exec rm -rf {} +
 
 
 %changelog
+* Mon Aug 03 2020 Luya Tshimbalanga <luya@fedoraproject.org> - 19.20-5
+- Use cmake macros for build and install
+
 * Sat Aug 01 2020 Fedora Release Engineering <releng@fedoraproject.org> - 19.20-4
 - Second attempt - Rebuilt for
   https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
