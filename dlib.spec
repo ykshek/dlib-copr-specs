@@ -58,7 +58,7 @@ library.
 %package doc
 Summary:	Documentation for dlib
 License:	Boost and Public Domain and CC-BY-SA
-Requires:	%{name}%{?_isa} = %{version}-%{release}
+Requires:	%{name} = %{version}-%{release}
 BuildArch:	noarch
 
 %description doc
