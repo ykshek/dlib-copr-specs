@@ -2,18 +2,20 @@
 
 Name:		dlib
 Version:	19.%{majorver}
-Release:	5%{?dist}
+Release:	6%{?dist}
 Summary:	A modern C++ toolkit containing machine learning algorithms
 
 License:	Boost
 URL:		http://dlib.net
 Source0:	http://dlib.net/files/%{name}-%{version}.tar.bz2
+# find FlexiBLAS as reference BLAS/LAPACK
+Patch1:   0001-find-flexiblas.patch
 
 BuildRequires:	boost-devel
 BuildRequires:	cmake
 BuildRequires:	gcc-c++
 BuildRequires:	gcc-gfortran
-BuildRequires:	openblas-devel
+BuildRequires:	pkgconfig(flexiblas)
 BuildRequires:	pkgconfig(fftw3)
 BuildRequires:	pkgconfig(libpng)
 BuildRequires:	pkgconfig(libjpeg)
@@ -68,12 +70,12 @@ documentation and examples.
 
 
 %prep
-%autosetup
+%autosetup -p1
 find docs -type f -exec chmod 644 {} +
 find examples -type f -exec chmod 644 {} +
 
 %build
-%cmake .
+%cmake
 %cmake_build
 
 # this is really needed: in the python tools build it's enabled by
@@ -128,6 +130,9 @@ find %{buildroot} -name '.*' -exec rm -rf {} +
 
 
 %changelog
+* Mon Aug 10 2020 Iñaki Úcar <iucar@fedoraproject.org> - 19.20-6
+- https://fedoraproject.org/wiki/Changes/FlexiBLAS_as_BLAS/LAPACK_manager
+
 * Mon Aug 03 2020 Luya Tshimbalanga <luya@fedoraproject.org> - 19.20-5
 - Use cmake macros for build and install
 

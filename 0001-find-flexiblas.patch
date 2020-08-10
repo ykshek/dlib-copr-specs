@@ -1,0 +1,27 @@
+From 42571ed82712a82ddb09911d86575c739b319eb2 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?I=C3=B1aki=20=C3=9Acar?= <iucar@fedoraproject.org>
+Date: Mon, 10 Aug 2020 18:06:13 +0200
+Subject: [PATCH] find flexiblas
+
+---
+ dlib/cmake_utils/find_blas.cmake | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/dlib/cmake_utils/find_blas.cmake b/dlib/cmake_utils/find_blas.cmake
+index 6ca4b9b..bd53455 100644
+--- a/dlib/cmake_utils/find_blas.cmake
++++ b/dlib/cmake_utils/find_blas.cmake
+@@ -64,8 +64,8 @@ if (UNIX OR MINGW)
+ 
+    # First, search for libraries via pkg-config, which is the cleanest path
+    find_package(PkgConfig)
+-   pkg_check_modules(BLAS_REFERENCE cblas)
+-   pkg_check_modules(LAPACK_REFERENCE lapack)
++   pkg_check_modules(BLAS_REFERENCE flexiblas)
++   pkg_check_modules(LAPACK_REFERENCE flexiblas)
+    if (BLAS_REFERENCE_FOUND AND LAPACK_REFERENCE_FOUND)
+       set(blas_libraries "${BLAS_REFERENCE_LDFLAGS}")
+       set(lapack_libraries "${LAPACK_REFERENCE_LDFLAGS}")
+-- 
+2.25.2
+
