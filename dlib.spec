@@ -8,14 +8,19 @@ Summary:	A modern C++ toolkit containing machine learning algorithms
 License:	Boost
 URL:		http://dlib.net
 Source0:	http://dlib.net/files/%{name}-%{version}.tar.bz2
+
+%if 0%{?fedora} > 32
 # find FlexiBLAS as reference BLAS/LAPACK
 Patch1:   0001-find-flexiblas.patch
+%endif
 
 BuildRequires:	boost-devel
 BuildRequires:	cmake
 BuildRequires:	gcc-c++
 BuildRequires:	gcc-gfortran
+%if 0%{?fedora} > 32
 BuildRequires:	pkgconfig(flexiblas)
+%endif
 BuildRequires:	pkgconfig(fftw3)
 BuildRequires:	pkgconfig(libpng)
 BuildRequires:	pkgconfig(libjpeg)
