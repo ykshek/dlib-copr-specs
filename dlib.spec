@@ -1,8 +1,8 @@
-%global	majorver 20
+%global	majorver 21
 
 Name:		dlib
 Version:	19.%{majorver}
-Release:	8%{?dist}
+Release:	1%{?dist}
 Summary:	A modern C++ toolkit containing machine learning algorithms
 
 License:	Boost
@@ -113,7 +113,8 @@ find %{buildroot} -name '.*' -exec rm -rf {} +
 %files -n python3-%{name}
 %license dlib/LICENSE.txt
 %license python_examples/LICENSE_FOR_EXAMPLE_PROGRAMS.txt
-%{python3_sitearch}/%{name}%{python3_ext_suffix}
+%{python3_sitearch}/_%{name}_pybind11%{python3_ext_suffix}
+%{python3_sitearch}/%{name}/
 %{python3_sitearch}/%{name}-*.egg-info/
 
 %files doc
@@ -126,6 +127,9 @@ find %{buildroot} -name '.*' -exec rm -rf {} +
 
 
 %changelog
+* Tue Feb 09 2021 Luya Tshimbalanga <luya@fedoraproject.org> - 19.21-1
+- Update to 19.21
+
 * Tue Jan 26 2021 Fedora Release Engineering <releng@fedoraproject.org> - 19.20-8
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
 
