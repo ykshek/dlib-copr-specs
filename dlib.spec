@@ -1,4 +1,4 @@
-%global	majorver 21
+%global	majorver 22
 
 Name:		dlib
 Version:	19.%{majorver}
@@ -8,21 +8,22 @@ Summary:	A modern C++ toolkit containing machine learning algorithms
 License:	Boost
 URL:		http://dlib.net
 Source0:	http://dlib.net/files/%{name}-%{version}.tar.bz2
-# find FlexiBLAS as reference BLAS/LAPACK
-Patch1:   0001-find-flexiblas.patch
 
 BuildRequires:	boost-devel
 BuildRequires:	cmake
 BuildRequires:	gcc-c++
 BuildRequires:	gcc-gfortran
+BuildRequires:	pkgconfig(cblas)
 BuildRequires:	pkgconfig(flexiblas)
 BuildRequires:	pkgconfig(fftw3)
+BuildRequires:  pkgconfig(lapack)
 BuildRequires:	pkgconfig(libpng)
 BuildRequires:	pkgconfig(libjpeg)
 BuildRequires:	pkgconfig(python3)
 BuildRequires:	pkgconfig(sqlite3)
 BuildRequires:	pkgconfig(x11)
 
+# Failed to build to ppc64le
 ExcludeArch:	ppc64le
 
 %description
@@ -127,6 +128,10 @@ find %{buildroot} -name '.*' -exec rm -rf {} +
 
 
 %changelog
+* Mon Mar 29 2021 Luya Tshimbalanga <luya@fedoraproject.org> - 19.22-1
+- Update to 19.22
+- Enable BLAS and LAPACK support
+
 * Tue Feb 09 2021 Luya Tshimbalanga <luya@fedoraproject.org> - 19.21-1
 - Update to 19.21
 
