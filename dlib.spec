@@ -13,6 +13,7 @@ BuildRequires:	boost-devel
 BuildRequires:	cmake
 BuildRequires:	gcc-c++
 BuildRequires:	gcc-gfortran
+BuildRequires:	python3-setuptools
 BuildRequires:	pkgconfig(cblas)
 BuildRequires:	pkgconfig(flexiblas)
 BuildRequires:	pkgconfig(fftw3)
