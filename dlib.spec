@@ -2,7 +2,7 @@
 
 Name:		dlib
 Version:	19.%{majorver}
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	A modern C++ toolkit containing machine learning algorithms
 
 License:	Boost
@@ -129,6 +129,9 @@ find %{buildroot} -name '.*' -exec rm -rf {} +
 
 
 %changelog
+* Fri Jun 04 2021 Python Maint <python-maint@redhat.com> - 19.22-2
+- Rebuilt for Python 3.10
+
 * Mon Mar 29 2021 Luya Tshimbalanga <luya@fedoraproject.org> - 19.22-1
 - Update to 19.22
 - Enable BLAS and LAPACK support
