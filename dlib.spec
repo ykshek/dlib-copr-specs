@@ -14,7 +14,8 @@ BuildRequires:	cmake
 BuildRequires:	gcc-c++
 BuildRequires:	gcc-gfortran
 BuildRequires:	python3-setuptools
-BuildRequires:	pkgconfig(flexiblas) # BLAS and LAPACK support
+# BLAS and LAPACK support
+BuildRequires:	pkgconfig(flexiblas)
 BuildRequires:	pkgconfig(fftw3)
 BuildRequires:	pkgconfig(libpng)
 BuildRequires:	pkgconfig(libjpeg)
