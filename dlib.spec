@@ -2,7 +2,7 @@
 
 Name:		dlib
 Version:	19.%{majorver}
-Release:	3%{?dist}
+Release:	4%{?dist}
 Summary:	A modern C++ toolkit containing machine learning algorithms
 
 License:	Boost
@@ -14,10 +14,8 @@ BuildRequires:	cmake
 BuildRequires:	gcc-c++
 BuildRequires:	gcc-gfortran
 BuildRequires:	python3-setuptools
-BuildRequires:	pkgconfig(cblas)
-BuildRequires:	pkgconfig(flexiblas)
+BuildRequires:	pkgconfig(flexiblas) # BLAS and LAPACK support
 BuildRequires:	pkgconfig(fftw3)
-BuildRequires:  pkgconfig(lapack)
 BuildRequires:	pkgconfig(libpng)
 BuildRequires:	pkgconfig(libjpeg)
 BuildRequires:	pkgconfig(python3)
@@ -129,6 +127,9 @@ find %{buildroot} -name '.*' -exec rm -rf {} +
 
 
 %changelog
+* Mon Jan 17 2022 Iñaki Úcar <iucar@fedoraproject.org> - 19.22-4
+- Switch back to FlexiBLAS
+
 * Wed Jul 21 2021 Fedora Release Engineering <releng@fedoraproject.org> - 19.22-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_35_Mass_Rebuild
 
