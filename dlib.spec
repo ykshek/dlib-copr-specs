@@ -1,4 +1,4 @@
-%global	majorver 23
+%global	majorver 24
 
 Name:		dlib
 Version:	19.%{majorver}
@@ -128,6 +128,9 @@ find %{buildroot} -name '.*' -exec rm -rf {} +
 
 
 %changelog
+* Sun May 08 2022 Fedora Release Monitoring <release-monitoring@fedoraproject.org> - 19.24-1
+- Update to 19.24 (#2045942)
+
 * Wed Jan 26 2022 Onuralp Sezer <thunderbirdtr@fedoraproject.org> - 19.23-1
 - Update to 19.23
 
