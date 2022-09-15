@@ -1,19 +1,28 @@
 %global	majorver 24
 
+%global commit 65bce59a1512cf222dec01d3e0f29b612dd181f5
+%global commitdate 20220905
+%global shortcommit  %(c=%{commit}; echo ${c:0:9})
+
 Name:		dlib
 Version:	19.%{majorver}
-Release:	3%{?dist}
+Release:	%autorelease -s %{commitdate}git%{shortcommit}
 Summary:	A modern C++ toolkit containing machine learning algorithms
 
 License:	Boost
 URL:		http://dlib.net
-Source0:	http://dlib.net/files/%{name}-%{version}.tar.bz2
+%{!?shortcommit:
+Source:	http://dlib.net/files/%{name}-%{version}.tar.bz2
+}
+%{?shortcommit:
+Source:		http://github.com/davisking/%{name}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
+}
 
 BuildRequires:	boost-devel
 BuildRequires:	cmake
+BuildRequires:	cmake(pybind11)
 BuildRequires:	gcc-c++
 BuildRequires:	gcc-gfortran
-BuildRequires:	python3-setuptools
 # BLAS and LAPACK support
 BuildRequires:	pkgconfig(flexiblas)
 BuildRequires:	pkgconfig(fftw3)
@@ -22,6 +31,7 @@ BuildRequires:	pkgconfig(libjpeg)
 BuildRequires:	pkgconfig(python3)
 BuildRequires:	pkgconfig(sqlite3)
 BuildRequires:	pkgconfig(x11)
+BuildRequires:	python3dist(setuptools)
 
 # Failed to build to ppc64le
 ExcludeArch:	ppc64le
@@ -71,7 +81,12 @@ documentation and examples.
 
 
 %prep
+%{!?shortcommit:
 %autosetup -p1
+}
+%{?shortcommit:
+%autosetup -n %{name}-%{commit}
+}
 find docs -type f -exec chmod 644 {} +
 find examples -type f -exec chmod 644 {} +
 
@@ -83,7 +98,7 @@ find examples -type f -exec chmod 644 {} +
 # default and we do not want that. see
 # https://github.com/davisking/dlib/commit/fbd117804758bd9174a27ce471acfe21b8bfc208
 # and https://github.com/davisking/dlib/issues/111
-%global py_setup_args --no USE_SSE4_INSTRUCTIONS
+#%%global py_setup_args --no USE_SSE4_INSTRUCTIONS
 %py3_build
 
 
@@ -121,130 +136,11 @@ find %{buildroot} -name '.*' -exec rm -rf {} +
 %files doc
 %license examples/LICENSE_FOR_EXAMPLE_PROGRAMS.txt
 %license examples/video_frames/license.txt
-%doc documentation.html
+#%%doc documentation.html
 %doc docs
-%doc docs/python/_static/{jquery,underscore}.js
+#%%doc docs/python/_static/{jquery,underscore}.js
 %doc examples
 
 
 %changelog
-* Thu Jul 21 2022 Fedora Release Engineering <releng@fedoraproject.org> - 19.24-3
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild
-
-* Mon Jun 13 2022 Python Maint <python-maint@redhat.com> - 19.24-2
-- Rebuilt for Python 3.11
-
-* Sun May 08 2022 Fedora Release Monitoring <release-monitoring@fedoraproject.org> - 19.24-1
-- Update to 19.24 (#2045942)
-
-* Wed Jan 26 2022 Onuralp Sezer <thunderbirdtr@fedoraproject.org> - 19.23-1
-- Update to 19.23
-
-* Thu Jan 20 2022 Fedora Release Engineering <releng@fedoraproject.org> - 19.22-5
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_36_Mass_Rebuild
-
-* Mon Jan 17 2022 Iñaki Úcar <iucar@fedoraproject.org> - 19.22-4
-- Switch back to FlexiBLAS
-
-* Wed Jul 21 2021 Fedora Release Engineering <releng@fedoraproject.org> - 19.22-3
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_35_Mass_Rebuild
-
-* Fri Jun 04 2021 Python Maint <python-maint@redhat.com> - 19.22-2
-- Rebuilt for Python 3.10
-
-* Mon Mar 29 2021 Luya Tshimbalanga <luya@fedoraproject.org> - 19.22-1
-- Update to 19.22
-- Enable BLAS and LAPACK support
-
-* Tue Feb 09 2021 Luya Tshimbalanga <luya@fedoraproject.org> - 19.21-1
-- Update to 19.21
-
-* Tue Jan 26 2021 Fedora Release Engineering <releng@fedoraproject.org> - 19.20-8
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
-
-* Fri Oct 02 2020 Miro Hrončok <mhroncok@redhat.com> <luya@fedoraproject.org> - 19.20-7
-- Changes/Python Upstream Architecture Names
-
-* Mon Aug 10 2020 Iñaki Úcar <iucar@fedoraproject.org> - 19.20-6
-- https://fedoraproject.org/wiki/Changes/FlexiBLAS_as_BLAS/LAPACK_manager
-
-* Mon Aug 03 2020 Luya Tshimbalanga <luya@fedoraproject.org> - 19.20-5
-- Use cmake macros for build and install
-
-* Sat Aug 01 2020 Fedora Release Engineering <releng@fedoraproject.org> - 19.20-4
-- Second attempt - Rebuilt for
-  https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
-
-* Mon Jul 27 2020 Fedora Release Engineering <releng@fedoraproject.org> - 19.20-3
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
-
-* Fri Jul 03 2020 Luya Tshimbalanga <luya@fedoraproject.org> - 19.20-2
-- Set noarch for large documentation package
-- Use specific versioning for libraries
-- Remove Sphinx build leftovers
-- Use %%global instead of %%define for declaration
-
-* Fri Jul 03 2020 Luya Tshimbalanga <luya@fedoraproject.org> - 19.20-1
-- Update to 19.20
-
-* Wed Mar 06 2019 Luya Tshimbalanga <luya@fedoraproject.org> - 19.17-1
-- Update to 19.17
-
-* Wed Mar 06 2019 Luya Tshimbalanga <luya@fedoraproject.org> - 19.16-3
-- Drop hard path buildrequires for python3 shebang fix
-
-* Wed Nov 28 2018 Luya Tshimbalanga <luya@fedoraproject.org> - 19.16-2
-- Fix directory ownership
-
-* Wed Nov 28 2018 Luya Tshimbalanga <luya@fedoraproject.org> - 19.16-1
-- Update to 19.16
-- Drop ldconfig scripts
-- Fix all python shebangs with new method
-
-* Mon Sep 24 2018 Miro Hrončok <mhroncok@redhat.com> - 19.4-10
-- Drop Python 2 subpackage (#1627444)
-
-* Thu Jul 12 2018 Fedora Release Engineering <releng@fedoraproject.org> - 19.4-9
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
-
-* Tue Jun 19 2018 Miro Hrončok <mhroncok@redhat.com> - 19.4-8
-- Rebuilt for Python 3.7
-
-* Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 19.4-7
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
-
-* Sun Aug 06 2017 Björn Esser <besser82@fedoraproject.org> - 19.4-6
-- Rebuilt for AutoReq cmake-filesystem
-
-* Wed Aug 02 2017 Fedora Release Engineering <releng@fedoraproject.org> - 19.4-5
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Binutils_Mass_Rebuild
-
-* Wed Jul 26 2017 Fedora Release Engineering <releng@fedoraproject.org> - 19.4-4
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Mass_Rebuild
-
-* Tue Jul 18 2017 Jonathan Wakely <jwakely@redhat.com> - 19.4-3
-- Rebuilt for Boost 1.64
-
-* Sun May 21 2017 Dmitry Mikhirev <mikhirev@gmail.com> 19.4-2
-- Add BR boost-python3-devel (RHBZ #1443250)
-
-* Mon Apr 17 2017 Dmitry Mikhirev <mikhirev@gmail.com> 19.4-1
-- Update to 19.4 (RHBZ #1442868)
-
-* Fri Feb 10 2017 Fedora Release Engineering <releng@fedoraproject.org> - 18.18-6
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
-
-* Mon Dec 19 2016 Miro Hrončok <mhroncok@redhat.com> - 18.18-5
-- Rebuild for Python 3.6
-
-* Tue Jul 19 2016 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 18.18-4
-- https://fedoraproject.org/wiki/Changes/Automatic_Provides_for_Python_RPM_Packages
-
-* Wed Feb 03 2016 Fedora Release Engineering <releng@fedoraproject.org> - 18.18-3
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
-
-* Sat Jan 23 2016 Dmitry Mikhirev <mikhirev@gmail.com> 18.18-2
-- Rebuild against new libboost_python
-
-* Wed Nov 4 2015 Dmitry Mikhirev <mikhirev@gmail.com> 18.18-1
-- Initial package
+%autochangelog
