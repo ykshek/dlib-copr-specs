@@ -90,6 +90,10 @@ documentation and examples.
 find docs -type f -exec chmod 644 {} +
 find examples -type f -exec chmod 644 {} +
 
+# unbundle pybind11, see https://bugzilla.redhat.com/2098694
+rm -r dlib/external/pybind11
+sed -i 's@add_subdirectory(../../dlib/external/pybind11 pybind11_build)@find_package(pybind11 CONFIG)@' tools/python/CMakeLists.txt
+
 %build
 %cmake
 %cmake_build
