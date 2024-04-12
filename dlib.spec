@@ -25,7 +25,9 @@ BuildRequires:  pkgconfig(x11)
 BuildRequires:  python3dist(setuptools)
 
 # Failed to build to ppc64le
-ExcludeArch:    ppc64le
+# Stop building for i686
+# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+ExcludeArch:    ppc64le %{ix86}
 
 %description
 Dlib is a general purpose cross-platform open source software library written
