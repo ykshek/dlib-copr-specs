@@ -96,6 +96,13 @@ documentation and examples.
 find docs -type f -exec chmod 644 {} +
 find examples -type f -exec chmod 644 {} +
 
+# Remove empty files
+find docs/docs -size 0 -print -delete
+
+# Move license files out of examples
+mv -v examples/LICENSE_FOR_EXAMPLE_PROGRAMS.txt .
+mv -v examples/video_frames/license.txt video_frames_license.txt
+
 # unbundle pybind11, see https://bugzilla.redhat.com/2098694
 rm -r dlib/external/pybind11
 sed -i 's@add_subdirectory(../../dlib/external/pybind11 pybind11_build)@find_package(pybind11 CONFIG)@' tools/python/CMakeLists.txt
@@ -123,11 +130,6 @@ popd
 %install
 %cmake_install
 
-rm -f %{buildroot}/%{_libdir}/*.a
-rm -f %{buildroot}/%{_docdir}/%{name}/LICENSE.txt
-# Remove Sphinx build leftovers
-rm -f %%{buildroot}/%{_docdir}/%{name}-doc/docs/python/.buildinfo
-
 %pyproject_install
 %pyproject_save_files -l %{name}
 
@@ -147,7 +149,7 @@ popd
 
 
 %files
-%license dlib/LICENSE.txt
+%license LICENSE.txt
 %{_libdir}/libdlib.so.19*
 
 %files devel
@@ -161,12 +163,10 @@ popd
 %doc README.md
 
 %files doc
-%license examples/LICENSE_FOR_EXAMPLE_PROGRAMS.txt
-%license examples/video_frames/license.txt
-#%%doc documentation.html
-%doc docs
-#%%doc docs/python/_static/{jquery,underscore}.js
+%doc docs/docs/
 %doc examples
+%license LICENSE_FOR_EXAMPLE_PROGRAMS.txt
+%license video_frames_license.txt
 
 
 %changelog
