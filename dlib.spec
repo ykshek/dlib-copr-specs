@@ -1,7 +1,7 @@
 %global forgeurl https://github.com/davisking/dlib
 
 Name:       dlib
-Version:    19.24.3
+Version:    19.24.4
 Release:    %autorelease
 Summary:    A modern C++ toolkit containing machine learning algorithms
 %forgemeta
