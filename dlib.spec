@@ -1,20 +1,13 @@
-#   %%global commit 65bce59a1512cf222dec01d3e0f29b612dd181f5
-#   %%global commitdate 20220905
-#   %%global shortcommit  %%(c=%%{commit}; echo ${c:0:9})
+%global forgeurl https://github.com/davisking/dlib
 
 Name:       dlib
 Version:    19.24.3
-Release:    %autorelease %{?shortcommit:-s %{commitdate}git%{shortcommit}}
+Release:    %autorelease
 Summary:    A modern C++ toolkit containing machine learning algorithms
-
+%forgemeta
 License:    BSL-1.0
 URL:        http://dlib.net
-%{!?shortcommit:
-Source: https://github.com/davisking/%{name}/archive/v%{version}/%{name}-v%{version}.tar.gz
-}
-%{?shortcommit:
-Source:     https://github.com/davisking/%{name}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
-}
+Source:     %forgesource
 
 BuildRequires:  boost-devel
 BuildRequires:  cmake
@@ -79,12 +72,8 @@ documentation and examples.
 
 
 %prep
-%{!?shortcommit:
-%autosetup -p1
-}
-%{?shortcommit:
-%autosetup -n %{name}-%{commit}
-}
+%forgeautosetup -p1
+
 find docs -type f -exec chmod 644 {} +
 find examples -type f -exec chmod 644 {} +
 
