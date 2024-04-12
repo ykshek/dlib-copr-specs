@@ -61,7 +61,6 @@ numerous other tasks.
 
 %package devel
 Summary:    Development files for dlib
-License:    Boost and Public Domain
 Requires:   %{name}%{?_isa} = %{version}-%{release}
 
 %description devel
@@ -72,7 +71,6 @@ the library.
 
 %package -n python3-%{name}
 Summary:    Python 3 interface to %{name}
-License:    Boost and Public Domain
 
 %description -n python3-%{name}
 Dlib is a general purpose cross-platform open source software library written
@@ -82,7 +80,7 @@ library.
 
 %package doc
 Summary:    Documentation for dlib
-License:    Boost and Public Domain and CC-BY-SA
+License:    CC0-1.0 AND CC-BY-SA-3.0
 Requires:   %{name} = %{version}-%{release}
 BuildArch:  noarch
 
