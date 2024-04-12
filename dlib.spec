@@ -1,5 +1,9 @@
 %global forgeurl https://github.com/davisking/dlib
 
+# Compiling and running tests takes quite long and is resource intensive.
+# Turn them off using `--without ctest`.
+%bcond ctest 1
+
 Name:       dlib
 Version:    19.24.4
 Release:    %autorelease
@@ -32,11 +36,18 @@ BuildRequires:  pkgconfig(libwebp)
 BuildRequires:  pkgconfig(python3)
 BuildRequires:  pkgconfig(sqlite3)
 BuildRequires:  pkgconfig(x11)
+BuildRequires:  python3dist(pytest)
+BuildRequires:  python3dist(more-itertools)
 
-# Failed to build to ppc64le
 # Stop building for i686
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
-ExcludeArch:    ppc64le %{ix86}
+ExcludeArch:    %{ix86}
+
+# Tests fail to compile on aarch64 and s390x.
+# https://github.com/davisking/dlib/issues/2947
+# With ppc64le already disabled due to build failures, let's make this
+ExclusiveArch:  x86_64
+# for the time being.
 
 %description
 Dlib is a general purpose cross-platform open source software library written
@@ -100,6 +111,14 @@ sed -i 's@add_subdirectory(../../dlib/external/pybind11 pybind11_build)@find_pac
 %cmake -DDLIB_WEBP_SUPPORT:BOOL=ON
 %cmake_build
 
+%if %{with ctest}
+# Unit tests
+pushd dlib/test
+%cmake -DDLIB_WEBP_SUPPORT:BOOL=ON
+%cmake_build
+popd
+%endif
+
 %pyproject_wheel
 
 
@@ -115,6 +134,18 @@ rm -f %%{buildroot}/%{_docdir}/%{name}-doc/docs/python/.buildinfo
 %pyproject_save_files -l %{name}
 
 find %{buildroot} -name '.*' -exec rm -rf {} +
+
+
+%check
+%if %{with ctest}
+pushd dlib/test/redhat-linux-build
+# tests can be disabled using `--no_${TEST}` with --runall or
+# enabled `--${TEST}` without it. `-h` shows all tests.
+# test_ffmpeg fails
+./dtest --runall --no_test_ffmpeg
+popd
+%endif
+%pytest -v
 
 
 %files
