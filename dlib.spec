@@ -2,37 +2,37 @@
 #   %%global commitdate 20220905
 #   %%global shortcommit  %%(c=%%{commit}; echo ${c:0:9})
 
-Name:		dlib
-Version:	19.24.3
-Release:	%autorelease %{?shortcommit:-s %{commitdate}git%{shortcommit}}
-Summary:	A modern C++ toolkit containing machine learning algorithms
+Name:       dlib
+Version:    19.24.3
+Release:    %autorelease %{?shortcommit:-s %{commitdate}git%{shortcommit}}
+Summary:    A modern C++ toolkit containing machine learning algorithms
 
-License:	BSL-1.0
-URL:		http://dlib.net
+License:    BSL-1.0
+URL:        http://dlib.net
 %{!?shortcommit:
-Source:	https://github.com/davisking/%{name}/archive/v%{version}/%{name}-v%{version}.tar.gz
+Source: https://github.com/davisking/%{name}/archive/v%{version}/%{name}-v%{version}.tar.gz
 }
 %{?shortcommit:
-Source:		https://github.com/davisking/%{name}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
+Source:     https://github.com/davisking/%{name}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
 }
 
-BuildRequires:	boost-devel
-BuildRequires:	cmake
-BuildRequires:	cmake(pybind11)
-BuildRequires:	gcc-c++
-BuildRequires:	gcc-gfortran
+BuildRequires:  boost-devel
+BuildRequires:  cmake
+BuildRequires:  cmake(pybind11)
+BuildRequires:  gcc-c++
+BuildRequires:  gcc-gfortran
 # BLAS and LAPACK support
-BuildRequires:	pkgconfig(flexiblas)
-BuildRequires:	pkgconfig(fftw3)
-BuildRequires:	pkgconfig(libpng)
-BuildRequires:	pkgconfig(libjpeg)
-BuildRequires:	pkgconfig(python3)
-BuildRequires:	pkgconfig(sqlite3)
-BuildRequires:	pkgconfig(x11)
-BuildRequires:	python3dist(setuptools)
+BuildRequires:  pkgconfig(flexiblas)
+BuildRequires:  pkgconfig(fftw3)
+BuildRequires:  pkgconfig(libpng)
+BuildRequires:  pkgconfig(libjpeg)
+BuildRequires:  pkgconfig(python3)
+BuildRequires:  pkgconfig(sqlite3)
+BuildRequires:  pkgconfig(x11)
+BuildRequires:  python3dist(setuptools)
 
 # Failed to build to ppc64le
-ExcludeArch:	ppc64le
+ExcludeArch:    ppc64le
 
 %description
 Dlib is a general purpose cross-platform open source software library written
@@ -45,9 +45,9 @@ numerous other tasks.
 
 
 %package devel
-Summary:	Development files for dlib
-License:	Boost and Public Domain
-Requires:	%{name}%{?_isa} = %{version}-%{release}
+Summary:    Development files for dlib
+License:    Boost and Public Domain
+Requires:   %{name}%{?_isa} = %{version}-%{release}
 
 %description devel
 Dlib is a general purpose cross-platform open source software library written
@@ -56,8 +56,8 @@ the library.
 
 
 %package -n python3-%{name}
-Summary:	Python 3 interface to %{name}
-License:	Boost and Public Domain
+Summary:    Python 3 interface to %{name}
+License:    Boost and Public Domain
 %{?python_provide:%python_provide python3-%{name}}
 
 %description -n python3-%{name}
@@ -67,10 +67,10 @@ library.
 
 
 %package doc
-Summary:	Documentation for dlib
-License:	Boost and Public Domain and CC-BY-SA
-Requires:	%{name} = %{version}-%{release}
-BuildArch:	noarch
+Summary:    Documentation for dlib
+License:    Boost and Public Domain and CC-BY-SA
+Requires:   %{name} = %{version}-%{release}
+BuildArch:  noarch
 
 %description doc
 Dlib is a general purpose cross-platform open source software library written
