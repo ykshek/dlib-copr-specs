@@ -22,7 +22,6 @@ BuildRequires:  pkgconfig(libjpeg)
 BuildRequires:  pkgconfig(python3)
 BuildRequires:  pkgconfig(sqlite3)
 BuildRequires:  pkgconfig(x11)
-BuildRequires:  python3dist(setuptools)
 
 # Failed to build to ppc64le
 # Stop building for i686
@@ -53,7 +52,6 @@ the library.
 %package -n python3-%{name}
 Summary:    Python 3 interface to %{name}
 License:    Boost and Public Domain
-%{?python_provide:%python_provide python3-%{name}}
 
 %description -n python3-%{name}
 Dlib is a general purpose cross-platform open source software library written
@@ -83,16 +81,16 @@ find examples -type f -exec chmod 644 {} +
 rm -r dlib/external/pybind11
 sed -i 's@add_subdirectory(../../dlib/external/pybind11 pybind11_build)@find_package(pybind11 CONFIG)@' tools/python/CMakeLists.txt
 
+
+%generate_buildrequires
+%pyproject_buildrequires
+
+
 %build
 %cmake
 %cmake_build
 
-# this is really needed: in the python tools build it's enabled by
-# default and we do not want that. see
-# https://github.com/davisking/dlib/commit/fbd117804758bd9174a27ce471acfe21b8bfc208
-# and https://github.com/davisking/dlib/issues/111
-#%%global py_setup_args --no USE_SSE4_INSTRUCTIONS
-%py3_build
+%pyproject_wheel
 
 
 %install
@@ -103,11 +101,11 @@ rm -f %{buildroot}/%{_docdir}/%{name}/LICENSE.txt
 # Remove Sphinx build leftovers
 rm -f %%{buildroot}/%{_docdir}/%{name}-doc/docs/python/.buildinfo
 
-%py3_install
-# Some files got ambiguous python shebangs, we fix them after everything else is done
-%py3_shebang_fix %{buildroot}%{python3_sitearch}/
+%pyproject_install
+%pyproject_save_files -l %{name}
 
 find %{buildroot} -name '.*' -exec rm -rf {} +
+
 
 %files
 %license dlib/LICENSE.txt
@@ -119,12 +117,9 @@ find %{buildroot} -name '.*' -exec rm -rf {} +
 %{_libdir}/cmake/dlib/
 %{_libdir}/pkgconfig/*.pc
 
-%files -n python3-%{name}
-%license dlib/LICENSE.txt
-%license python_examples/LICENSE_FOR_EXAMPLE_PROGRAMS.txt
+%files -n python3-%{name} -f %{pyproject_files}
 %{python3_sitearch}/_%{name}_pybind11%{python3_ext_suffix}
-%{python3_sitearch}/%{name}/
-%{python3_sitearch}/%{name}-*.egg-info/
+%doc README.md
 
 %files doc
 %license examples/LICENSE_FOR_EXAMPLE_PROGRAMS.txt
