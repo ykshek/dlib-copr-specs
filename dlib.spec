@@ -15,10 +15,20 @@ BuildRequires:  cmake(pybind11)
 BuildRequires:  gcc-c++
 BuildRequires:  gcc-gfortran
 # BLAS and LAPACK support
-BuildRequires:  pkgconfig(flexiblas)
+BuildRequires:  pkgconfig(cblas)
 BuildRequires:  pkgconfig(fftw3)
+BuildRequires:  pkgconfig(lapack)
+BuildRequires:  pkgconfig(libavcodec)
+BuildRequires:  pkgconfig(libavdevice)
+BuildRequires:  pkgconfig(libavfilter)
+BuildRequires:  pkgconfig(libavformat)
+BuildRequires:  pkgconfig(libavutil)
 BuildRequires:  pkgconfig(libpng)
 BuildRequires:  pkgconfig(libjpeg)
+BuildRequires:  pkgconfig(libjxl)
+BuildRequires:  pkgconfig(libswresample)
+BuildRequires:  pkgconfig(libswscale)
+BuildRequires:  pkgconfig(libwebp)
 BuildRequires:  pkgconfig(python3)
 BuildRequires:  pkgconfig(sqlite3)
 BuildRequires:  pkgconfig(x11)
@@ -87,7 +97,7 @@ sed -i 's@add_subdirectory(../../dlib/external/pybind11 pybind11_build)@find_pac
 
 
 %build
-%cmake
+%cmake -DDLIB_WEBP_SUPPORT:BOOL=ON
 %cmake_build
 
 %pyproject_wheel
