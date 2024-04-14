@@ -4,6 +4,13 @@
 # Turn them off using `--without ctest`.
 %bcond ctest 1
 
+# On small builders (~15GiB) the build fails running out of memory.
+# With a few tweaks memory consumption peaks at just over 6GiB.
+# Constrain the build to 7GiB per core.
+%if %{with ctest}
+%constrain_build -m 7864320
+%endif
+
 Name:       dlib
 Version:    19.24.4
 Release:    %autorelease
@@ -38,6 +45,7 @@ BuildRequires:  pkgconfig(sqlite3)
 BuildRequires:  pkgconfig(x11)
 BuildRequires:  python3dist(pytest)
 BuildRequires:  python3dist(more-itertools)
+BuildRequires:  time
 
 # Stop building for i686
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
@@ -113,13 +121,25 @@ sed -i 's@add_subdirectory(../../dlib/external/pybind11 pybind11_build)@find_pac
 
 
 %build
-%cmake -DDLIB_WEBP_SUPPORT:BOOL=ON
+%cmake \
+  -DCMAKE_BUILD_TYPE:STRING=RelWithDebInfo \
+  -DLIB_USE_CUDA:BOOL=OFF \
+  -DDLIB_WEBP_SUPPORT:BOOL=ON 
 %cmake_build
 
 %if %{with ctest}
+# Use `-O` instead of `-O2`. Reduces max memory for single thread from
+# 17GB to 12GB. It also reduces time to build.
+# Also reduce debuginfo using `-g1` instead of `-g` (aka `-g2`).
+# Memory consumption drops further to ~6GiB and speeds up again.
+CXXFLAGS="%{lua: my_cxxflags = string.gsub(macros.build_cxxflags, "%-O2", "-O"); 
+         my_cxxflags = string.gsub(my_cxxflags, "%-g ", "-g1 ");
+         print(my_cxxflags)}"
 # Unit tests
 pushd dlib/test
-%cmake -DDLIB_WEBP_SUPPORT:BOOL=ON
+%cmake \
+  -DLIB_USE_CUDA:BOOL=OFF \
+  -DDLIB_WEBP_SUPPORT:BOOL=ON
 %cmake_build
 popd
 %endif
