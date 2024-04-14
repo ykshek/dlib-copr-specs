@@ -6,9 +6,9 @@
 
 # On small builders (~15GiB) the build fails running out of memory.
 # With a few tweaks memory consumption peaks at just over 6GiB.
-# Constrain the build to 7GiB per core.
+# Constrain the build to 7GiB per core (value to -m is in MiB).
 %if %{with ctest}
-%constrain_build -m 7864320
+%constrain_build -m 7168
 %endif
 
 Name:       dlib
