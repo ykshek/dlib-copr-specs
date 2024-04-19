@@ -4,13 +4,6 @@
 # Turn them off using `--without ctest`.
 %bcond ctest 1
 
-# On small builders (~15GiB) the build fails running out of memory.
-# With a few tweaks memory consumption peaks at just over 6GiB.
-# Constrain the build to 7GiB per core (value to -m is in MiB).
-%if %{with ctest}
-%constrain_build -m 7168
-%endif
-
 Name:       dlib
 Version:    19.24.4
 Release:    %autorelease
@@ -131,11 +124,21 @@ sed -i 's@add_subdirectory(../../dlib/external/pybind11 pybind11_build)@find_pac
 # Use `-O` instead of `-O2`. Reduces max memory for single thread from
 # 17GB to 12GB. It also reduces time to build.
 # Also reduce debuginfo using `-g1` instead of `-g` (aka `-g2`).
-# Memory consumption drops further to ~6GiB and speeds up again.
-CXXFLAGS="%{lua: my_cxxflags = string.gsub(macros.build_cxxflags, "%-O2", "-O"); 
-         my_cxxflags = string.gsub(my_cxxflags, "%-g ", "-g1 ");
-         print(my_cxxflags)}"
+# Memory consumption drops further to ~6GiB and build speeds up again.
+CXXFLAGS="${CXXFLAGS/-O2/-O}"
+CXXFLAGS="${CXXFLAGS/-g /-g1 }"
+
 # Unit tests
+#
+# On small builders (~15GiB) the build fails running out of memory.
+# With a few tweaks memory consumption peaks at just over 6GiB.
+# Constrain the build to 7GiB per core.
+#
+# RHEL doesn't support `%%constrain_build` nor `%%{limit_build ...}`.
+
+MAX_CPUS="$(($(cat /proc/meminfo | grep MemTotal | awk '{print $2}') / $((7168 * 1024))))"
+%global _smp_mflags "-j${MAX_CPUS}"
+
 pushd dlib/test
 %cmake \
   -DLIB_USE_CUDA:BOOL=OFF \
@@ -151,7 +154,7 @@ popd
 %cmake_install
 
 %pyproject_install
-%pyproject_save_files -l %{name}
+%pyproject_save_files %{?fedora:-l} %{name}
 
 find %{buildroot} -name '.*' -exec rm -rf {} +
 
