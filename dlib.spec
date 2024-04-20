@@ -114,10 +114,16 @@ sed -i 's@add_subdirectory(../../dlib/external/pybind11 pybind11_build)@find_pac
 
 
 %build
+# dlib requires `libjxl_cms` provided by libjxl >= 0.10` currently only
+# available in rawhide (F41)
 %cmake \
   -DCMAKE_BUILD_TYPE:STRING=RelWithDebInfo \
-  -DLIB_USE_CUDA:BOOL=OFF \
-  -DDLIB_WEBP_SUPPORT:BOOL=ON 
+  -DDLIB_USE_CUDA:BOOL=OFF \
+%if 0%{?fedora} >= 41
+  -DDLIB_JXL_SUPPORT:BOOL=ON
+%else
+  -DDLIB_JXL_SUPPORT:BOOL=OFF
+%endif
 %cmake_build
 
 %if %{with ctest}
@@ -141,8 +147,12 @@ MAX_CPUS="$(($(cat /proc/meminfo | grep MemTotal | awk '{print $2}') / $((7168 *
 
 pushd dlib/test
 %cmake \
-  -DLIB_USE_CUDA:BOOL=OFF \
-  -DDLIB_WEBP_SUPPORT:BOOL=ON
+  -DDLIB_USE_CUDA:BOOL=OFF \
+%if 0%{?fedora} >= 41
+  -DDLIB_JXL_SUPPORT:BOOL=ON
+%else
+  -DDLIB_JXL_SUPPORT:BOOL=OFF
+%endif
 %cmake_build
 popd
 %endif
