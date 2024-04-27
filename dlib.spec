@@ -12,6 +12,9 @@ Summary:    A modern C++ toolkit containing machine learning algorithms
 License:    BSL-1.0
 URL:        http://dlib.net
 Source:     %forgesource
+# Fix aarch64 build
+# https://github.com/davisking/dlib/issues/2947
+Patch:      fix_aarch64.patch
 
 BuildRequires:  boost-devel
 BuildRequires:  cmake
@@ -42,13 +45,9 @@ BuildRequires:  time
 
 # Stop building for i686
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
-ExcludeArch:    %{ix86}
-
-# Tests fail to compile on aarch64 and s390x.
-# https://github.com/davisking/dlib/issues/2947
-# With ppc64le already disabled due to build failures, let's make this
-ExclusiveArch:  x86_64
-# for the time being.
+# While fix_aarch64.patch (see above) also fixes the s390x build of tests,
+# running those tests results in lots of failures and even coredumps.
+ExcludeArch:    %{ix86} s390x
 
 %description
 Dlib is a general purpose cross-platform open source software library written
