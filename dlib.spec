@@ -21,10 +21,11 @@ BuildRequires:  cmake
 BuildRequires:  cmake(pybind11)
 BuildRequires:  gcc-c++
 BuildRequires:  gcc-gfortran
-# BLAS and LAPACK support
-BuildRequires:  pkgconfig(cblas)
 BuildRequires:  pkgconfig(fftw3)
-BuildRequires:  pkgconfig(lapack)
+# BLAS and LAPACK support
+# We need to depend on `flexiblas` rather than `cblas` and `lapack`
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/BLAS_LAPACK/
+BuildRequires:  pkgconfig(flexiblas)
 BuildRequires:  pkgconfig(libavcodec)
 BuildRequires:  pkgconfig(libavdevice)
 BuildRequires:  pkgconfig(libavfilter)
