@@ -12,6 +12,9 @@ Summary:    A modern C++ toolkit containing machine learning algorithms
 License:    BSL-1.0
 URL:        http://dlib.net
 Source:     %forgesource
+# Replace deprecated pkgutil.find_loader()
+# https://github.com/davisking/dlib/pull/3043
+Patch:      https://github.com/davisking/dlib/pull/3043.patch
 
 BuildRequires:  boost-devel
 BuildRequires:  cmake
@@ -140,7 +143,7 @@ CXXFLAGS="${CXXFLAGS/-g /-g1 }"
 # RHEL doesn't support `%%constrain_build` nor `%%{limit_build ...}`.
 
 MAX_CPUS="$(($(cat /proc/meminfo | grep MemTotal | awk '{print $2}') / $((7168 * 1024))))"
-%global _smp_mflags "-j${MAX_CPUS}"
+%global _smp_mflags "-j$(( MAX_CPUS ? MAX_CPUS : 1 ))"
 
 pushd dlib/test
 %cmake \

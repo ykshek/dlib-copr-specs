@@ -1,0 +1,32 @@
+From 75c96a49108b27395ac25456f3c5998bec0150e7 Mon Sep 17 00:00:00 2001
+From: Sandro <devel@penguinpee.nl>
+Date: Sat, 11 Jan 2025 10:05:20 +0100
+Subject: [PATCH] Replace deprecated pkgutil.find_loader()
+
+That method has been deprecated in Python 3.12 and will be removed from
+Python 3.14. Replace it with a direct call to
+`importlib.util.find_spec()`, which `pkgutil.find_loader()` was wrapping
+around.
+---
+ tools/python/test/utils.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tools/python/test/utils.py b/tools/python/test/utils.py
+index 0f97ba75b3..bdf7d59deb 100644
+--- a/tools/python/test/utils.py
++++ b/tools/python/test/utils.py
+@@ -1,4 +1,4 @@
+-import pkgutil
++import importlib
+ import sys
+ 
+ def save_pickled_compatible(obj_to_pickle, file_name):
+@@ -36,7 +36,7 @@ def is_numpy_installed():
+     '''
+         Returns True if Numpy is installed otherwise False
+     '''
+-    if pkgutil.find_loader("numpy"):
++    if importlib.util.find_spec("numpy"):
+         return True
+     else:
+         return False
