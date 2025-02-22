@@ -105,6 +105,9 @@ mv -v examples/video_frames/license.txt video_frames_license.txt
 rm -r dlib/external/pybind11
 sed -i 's@add_subdirectory(../../dlib/external/pybind11 pybind11_build)@find_package(pybind11 CONFIG)@' tools/python/CMakeLists.txt
 
+# Do not treat warnings as errors when compiling tests
+sed -r -i 's/[[:space:]]+-Werror//' dlib/test/CMakeLists.txt
+
 
 %generate_buildrequires
 %pyproject_buildrequires
