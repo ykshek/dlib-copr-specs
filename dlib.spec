@@ -5,7 +5,7 @@
 %bcond ctest 1
 
 Name:       dlib
-Version:    19.24.6
+Version:    19.24.8
 Release:    %autorelease
 Summary:    A modern C++ toolkit containing machine learning algorithms
 %forgemeta
