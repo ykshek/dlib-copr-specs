@@ -12,8 +12,6 @@ Summary:    A modern C++ toolkit containing machine learning algorithms
 License:    BSL-1.0
 URL:        http://dlib.net
 Source:     %forgesource
-# Fix build issue with GCC 15
-Patch:      https://github.com/davisking/dlib/pull/3067.patch
 
 BuildRequires:  boost-devel
 BuildRequires:  cmake
@@ -180,12 +178,12 @@ pushd dlib/test/redhat-linux-build
 ./dtest --runall --no_test_ffmpeg
 popd
 %endif
-%pytest -v
+%pytest -r fEs
 
 
 %files
 %license LICENSE.txt
-%{_libdir}/libdlib.so.19*
+%{_libdir}/libdlib.so.20*
 
 %files devel
 %{_libdir}/libdlib.so
