@@ -1,5 +1,3 @@
-%global forgeurl https://github.com/davisking/dlib
-
 # Compiling and running tests takes quite long and is resource intensive.
 # Turn them off using `--without ctest`.
 %bcond ctest 1
@@ -8,7 +6,11 @@ Name:       dlib
 Version:    20.0
 Release:    %autorelease
 Summary:    A modern C++ toolkit containing machine learning algorithms
+
+%global forgeurl https://github.com/davisking/dlib
+%global tag v%{version}
 %forgemeta
+
 License:    BSL-1.0
 URL:        http://dlib.net
 Source:     %forgesource
