@@ -14,6 +14,9 @@ Summary:    A modern C++ toolkit containing machine learning algorithms
 License:    BSL-1.0
 URL:        http://dlib.net
 Source:     %forgesource
+# Fix test with regrards to changed ref count in Python 3.14+
+# https://github.com/davisking/dlib/issues/3096
+Patch:      %{forgeurl}/pull/3098.patch
 
 BuildRequires:  boost-devel
 BuildRequires:  cmake
