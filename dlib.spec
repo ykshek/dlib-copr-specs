@@ -5,15 +5,15 @@
 %bcond ctest 1
 
 Name:       dlib
-Version:    19.24.8
+Version:    20.0
 Release:    %autorelease
 Summary:    A modern C++ toolkit containing machine learning algorithms
 %forgemeta
 License:    BSL-1.0
 URL:        http://dlib.net
 Source:     %forgesource
-# Fix build issue with GCC 15
-Patch:      https://github.com/davisking/dlib/pull/3067.patch
+# Fix build issue with Python 3.14
+Patch:      https://github.com/davisking/dlib/pull/3098.patch
 
 BuildRequires:  boost-devel
 BuildRequires:  cmake
@@ -185,7 +185,7 @@ popd
 
 %files
 %license LICENSE.txt
-%{_libdir}/libdlib.so.19*
+%{_libdir}/libdlib.so.20*
 
 %files devel
 %{_libdir}/libdlib.so
