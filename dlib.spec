@@ -12,8 +12,10 @@ Summary:    A modern C++ toolkit containing machine learning algorithms
 License:    BSL-1.0 AND Zlib AND libpng-2.0 AND NTP
 URL:        http://dlib.net
 Source:     %forgesource
-# Fix build issue with Python 3.14
+# Fix build issue with Python 3.14 for F43
 Patch:      https://github.com/davisking/dlib/pull/3098.patch
+# Fix build issue with GCC 16 for F44
+Patch2:     https://github.com/davisking/dlib/pull/3137.patch
 
 BuildRequires:  boost-devel
 BuildRequires:  cmake
