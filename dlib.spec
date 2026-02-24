@@ -9,7 +9,7 @@ Version:    20.0
 Release:    %autorelease
 Summary:    A modern C++ toolkit containing machine learning algorithms
 %forgemeta
-License:    BSL-1.0
+License:    BSL-1.0 AND Zlib AND libpng-2.0 AND NTP
 URL:        http://dlib.net
 Source:     %forgesource
 # Fix build issue with Python 3.14
@@ -17,7 +17,8 @@ Patch:      https://github.com/davisking/dlib/pull/3098.patch
 
 BuildRequires:  boost-devel
 BuildRequires:  cmake
-BuildRequires:  cmake(pybind11)
+# Use Pybind11 from fedora repo
+BuildRequires:  pybind11-devel
 BuildRequires:  gcc-c++
 BuildRequires:  gcc-gfortran
 BuildRequires:  pkgconfig(fftw3)
@@ -47,7 +48,6 @@ BuildRequires:  time
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 # While fix_aarch64.patch (see above) also fixes the s390x build of tests,
 # running those tests results in lots of failures and even coredumps.
-ExcludeArch:    %{ix86} s390x
 
 %description
 Dlib is a general purpose cross-platform open source software library written
@@ -71,6 +71,7 @@ the library.
 
 %package -n python3-%{name}
 Summary:    Python 3 interface to %{name}
+Requires:  python3-libs
 
 %description -n python3-%{name}
 Dlib is a general purpose cross-platform open source software library written
@@ -106,6 +107,15 @@ mv -v examples/video_frames/license.txt video_frames_license.txt
 # unbundle pybind11, see https://bugzilla.redhat.com/2098694
 rm -r dlib/external/pybind11
 sed -i 's@add_subdirectory(../../dlib/external/pybind11 pybind11_build)@find_package(pybind11 CONFIG)@' tools/python/CMakeLists.txt
+
+# Unbundle cblas to ensure system BLAS is used, see https://bugzilla.redhat.com/show_bug.cgi?id=2408803
+rm -rf dlib/external/cblas
+
+# Remove Kiss_fft, libjpeg, libpng, and zlib.
+rm -rf dlib/external/Kiss_fft
+rm -rf dlib/external/libjpeg
+rm -rf dlib/external/libpng
+rm -rf dlib/external/zlib
 
 # Do not treat warnings as errors when compiling tests
 sed -r -i 's/[[:space:]]+-Werror//' dlib/test/CMakeLists.txt
